@@ -1,27 +1,44 @@
-/* eslint-disable react/prop-types */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 //import React from "react";
 import { useState } from "react";
 import TimeDisplay from "../helpers/TimeDisplay";
-import { useDispatch } from "react-redux";
-import { doneTask, getTasks,deleteTask } from "../Features/todoSlice";
-import { useSelector } from "react-redux";
+//import { useDispatch } from "react-redux";
+import { doneTask, getTasks } from "../Features/todoSlice";
+//import { useSelector } from "react-redux";
+import { useAppDispatch } from "../reduxHook";
 import { toast } from 'react-toastify';
 import { useNavigate } from "react-router";
 
-const TaskItem = (props) => {
-  const [toggle, setToggle] = useState(props.done);
-  const dispatch = useDispatch()
-  const tasksId = useSelector((state) => state.todo.tasks.id);
+interface tasksType {
+  items : {
+    title : string,
+    id : number,
+    userId ?: number,
+    owner : number,
+    description : string,
+    date : number,
+    done : boolean
+  },
+  onDeleteItem : (taskId : number) => void
+}
+
+
+
+const TaskItem = (props : tasksType) => {
+  const [toggle, setToggle] = useState(props.items.done);
+  const dispatch = useAppDispatch()
+  //const tasksId = useAppSelector((state) => state.todo.tasks.id);
   const navigateTo = useNavigate()
   //const token = localStorage.getItem("token");
   //const headers = { Authorization: `Bearer ${token}`}
   const toggleHandler = async () => {
     try{
-       dispatch(doneTask(props))
-      setToggle((prevToggle) => !prevToggle);
+       dispatch(doneTask(props.items))
+      setToggle((prevToggle: any) => !prevToggle);
       //alert("Task done status edited successfully");
-       dispatch(getTasks())
-    }catch (error){
+       dispatch(getTasks({onSuccess : () => {},onFail :() =>{navigateTo("/login")}}))
+    }catch (error : any){
       console.log(error);
       //alert(error)
       toast.error(error, {
@@ -38,8 +55,8 @@ const TaskItem = (props) => {
 
   };
   const deleteHandler = () => {
-    props?.setLoading(true)
-    props.onDeleteItem(props.id)
+    //props?.setLoading(true)
+    props.onDeleteItem(props.items.id)
 
     //dispatch(deleteTask(tasksId));
     dispatch(getTasks({onSuccess : () => {},onFail :() =>{navigateTo("/login")}}))
@@ -60,11 +77,11 @@ const TaskItem = (props) => {
             <div className="clearfix">
               <div className="float-start">
                 {!toggle ? (
-                  <span className="card-title tasktitle">{props.title}</span>
+                  <span className="card-title tasktitle">{props.items.title}</span>
                 ) : (
-                  <s className="card-title tasktitle">{props.title}</s>
+                  <s className="card-title tasktitle">{props.items.title}</s>
                 )}
-                <p className="lead tasklead">{props.description}</p>
+                <p className="lead tasklead">{props.items.description}</p>
               </div>
               <div className="float-end pe-4 pt-3">
                 <div className="form-check">
@@ -72,8 +89,8 @@ const TaskItem = (props) => {
                     type="checkbox"
                     className="form-check-input rounded-circle"
                     style={{ transform: "scale(1.5)" }}
-                    id={`check${props.id}`}
-                    name={`option${props.id}`}
+                    id={`check${props.items.id}`}
+                    name={`option${props.items.id}`}
                     //value={Math.floor(Math.random() * 1000)}
                     checked={toggle}
                     onChange={
@@ -90,11 +107,11 @@ const TaskItem = (props) => {
           <div className="row">
             <div className="col-sm-9 ps-5">
               {/*<p className="lead taskdate">{new Date(date * 1000).toLocaleString()}</p>*/}
-              <TimeDisplay unixTime={props.date}/>
+              <TimeDisplay unixTime={props.items.date}/>
             </div>
             <div className="col-sm-3">
               <img
-                src={props.image}
+                src="#"
                 className="float-end me-4 pb-2"
                 width="50%"
                 height="40px"

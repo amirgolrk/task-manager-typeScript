@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { useState, useEffect } from "react";
 //import people1 from "../assets/Screenshot 2023-07-05 142051.png";
 //import people2 from "../assets/Screenshot 2023-07-05 154910.png";
@@ -7,7 +9,8 @@ import Tasks from "../components/Tasks";
 import FormModal from "../modals/FormModal";
 //import axios from "axios";
 import Loader from "../helpers/Loader";
-import { useDispatch, useSelector } from "react-redux";
+//import { useDispatch, useSelecstor } from "react-redux";
+import { useAppDispatch,useAppSelector } from "../reduxHook";
 import { getTasks } from "../Features/todoSlice";
 import { deleteTask } from "../Features/todoSlice";
 import CurrentTimeComponent from "../helpers/CurrentTimeComponent";
@@ -16,22 +19,22 @@ import { useNavigate } from "react-router";
 
 function Card() {
   const [formIsOpen, setFormIsOpen] = useState(false);
-  const dispatch = useDispatch();
-  const tasksData = useSelector((state) => state.todo.tasks);
+  const dispatch = useAppDispatch();
+  const tasksData = useAppSelector((state) => state.todo.tasks);
   console.log(tasksData);
-  const isLoading = useSelector((state) => state.todo.loading);
-  const openedCount = useSelector((state) => state.todo.openedCount);
-  const closedCount = useSelector((state) => state.todo.closedCount);
-  const openedTasks = useSelector((state) => state.todo.openedTasks);
-  const closedTasks = useSelector((state) => state.todo.closedTasks);
+  const isLoading = useAppSelector((state) => state.todo.loading);
+  const openedCount = useAppSelector((state) => state.todo.openedCount);
+  const closedCount = useAppSelector((state) => state.todo.closedCount);
+  const openedTasks = useAppSelector((state) => state.todo.openedTasks);
+  const closedTasks = useAppSelector((state) => state.todo.closedTasks);
   const [taskType, setTaskType] = useState(0);
   const navigateTo = useNavigate()
 
   const confirmHandler = () => {
-    setFormIsOpen(null);
+    setFormIsOpen(false);
   };
 
-  const addData = async (task) => {
+  const addData = async (task: any) => {
     // We don't need this function since we're handling tasks through Redux.
     // If you have a form for adding tasks, you can dispatch the `AddTask` action instead.
     await dispatch(getTasks({onSuccess : () => {},onFail :() =>{navigateTo("/login")}}))
@@ -41,7 +44,7 @@ function Card() {
     dispatch(deleteTask(taskId));
     dispatch(getTasks());
   };*/
-  async function deleteHandler(taskId) {
+  async function deleteHandler(taskId : number) {
 
     
     await dispatch(deleteTask(taskId));
@@ -76,7 +79,8 @@ function Card() {
             <div className="row">
               <div className="col">
                 <h3 className="card-title">Todays Task</h3>
-                <CurrentTimeComponent />
+                {/*CurrentTimeComponent()*/ }
+                <CurrentTimeComponent/>
               </div>
               <div className="col">
                 <button

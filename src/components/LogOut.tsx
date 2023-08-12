@@ -1,11 +1,11 @@
 import { RiLogoutCircleLine } from "react-icons/ri";
 import { logOut } from "../Features/loginSlice";
-import { useDispatch } from "react-redux";
+//import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router";
 import { toast } from "react-toastify";
-
+import { useAppDispatch } from "../reduxHook";
 const LogOut = () => {
-    const dispatchTo = useDispatch();
+    const dispatchTo = useAppDispatch();
     const navigateTo = useNavigate()
 
     const logoutHandler = () => {

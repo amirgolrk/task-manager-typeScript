@@ -1,7 +1,12 @@
-/* eslint-disable react/prop-types */
+
 //import React from 'react';
 
-const TimeDisplay = ({ unixTime }) => {
+interface TimeDisplayProps {
+  unixTime : number
+}
+
+
+const TimeDisplay: React.FC<TimeDisplayProps> = ({ unixTime }) => {
   const THREE_DAYS_IN_SECONDS = 3 * 24 * 60 * 60 * 1000;
 
   const getCurrentTime = () => {
@@ -9,9 +14,9 @@ const TimeDisplay = ({ unixTime }) => {
     return currentTime;
   };
 
-  const formatDate = (timestamp) => {
+  const formatDate = (timestamp : number) => {
     const date = new Date(timestamp);
-    const options = {
+    const options : Intl.DateTimeFormatOptions = {
       weekday: 'long',
       year: 'numeric',
       month: 'long',
@@ -20,9 +25,9 @@ const TimeDisplay = ({ unixTime }) => {
     return date.toLocaleDateString('en-US', options);
   };
 
-  const formatSolarDate = (timestamp) => {
+  const formatSolarDate = (timestamp : number) => {
     const date = new Date(timestamp);
-    const options = {
+    const options : Intl.DateTimeFormatOptions = {
       year: 'numeric',
       month: 'numeric',
       day: 'numeric',
@@ -30,7 +35,7 @@ const TimeDisplay = ({ unixTime }) => {
     return date.toLocaleDateString('en-US', options);
   };
 
-  const getTimeDifference = (timestamp) => {
+  const getTimeDifference = (timestamp : number) => {
     const currentTime = getCurrentTime();
     const localTime = new Date().getTimezoneOffset() * 60 * 1000; // Local timezone offset in milliseconds
     const difference = currentTime + localTime - timestamp;

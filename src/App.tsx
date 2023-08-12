@@ -9,7 +9,9 @@ import ErrorPage from "./pages/ErrorPage.tsx";
 import RouteGuard from "./components/RouteGuard.tsx";
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-const App = () => {
+
+//I could simply jjust not write React.fc
+const App:React.FC = () => {
     return (
         <BrowserRouter>
         <ToastContainer/>

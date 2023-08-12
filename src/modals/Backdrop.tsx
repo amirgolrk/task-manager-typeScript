@@ -1,6 +1,6 @@
-/* eslint-disable react/prop-types */
-const Backdrop = (props) => {
-    return <div className="backdrop" onClick={props.onConfirm}></div>;
+
+const Backdrop = ({onConfirm} : {onConfirm: () => void, }) => {
+    return <div className="backdrop" onClick={onConfirm}></div>;
   };
 
   export default Backdrop 

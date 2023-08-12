@@ -1,8 +1,28 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 import { toast } from "react-toastify";
 
-export const getTasks = createAsyncThunk("todo/getTodos", async (action) => {
+interface actionType {
+  onFail : () => void,
+  onSuccess : () => void
+}
+
+interface addTaskPayLoadType {
+  newTaskData : {  userId: number;
+    owner: number;
+    title: string ;
+    description: string;
+    date: number;
+    done: boolean},
+  onFail : () => void,
+
+}
+
+
+
+export const getTasks = createAsyncThunk("todo/getTodos", async (action : actionType) => {
   try {
     const token = localStorage.getItem("token");
     const headers = { Authorization: `Bearer ${token}` };
@@ -10,7 +30,7 @@ export const getTasks = createAsyncThunk("todo/getTodos", async (action) => {
       headers,
     });
     return response.data;
-  } catch (error) {
+  } catch (error : any) {
     //alert(`${error?.response?.data} please log in again`)
     toast.error(`${error?.message}`, {
       position: "top-left",
@@ -32,7 +52,7 @@ export const getTasks = createAsyncThunk("todo/getTodos", async (action) => {
 
 export const deleteTask = createAsyncThunk(
   "todo/deleteTodo",
-  async (taskId) => {
+  async (taskId : number) => {
     const token = localStorage.getItem("token");
     const headers = { Authorization: `Bearer ${token}` };
     const response = await axios.delete(
@@ -43,7 +63,12 @@ export const deleteTask = createAsyncThunk(
   }
 );
 
-export const doneTask = createAsyncThunk("task/doneTask", async (task) => {
+interface doneTaskType {
+  id : number,
+  done : boolean
+}
+
+export const doneTask = createAsyncThunk("task/doneTask", async (task : doneTaskType) => {
   try {
     const token = localStorage.getItem("token");
     const headers = { Authorization: `Bearer ${token}` };
@@ -65,7 +90,7 @@ export const doneTask = createAsyncThunk("task/doneTask", async (task) => {
       theme: "colored",
     });
     return response.data;
-  } catch (error) {
+  } catch (error : any) {
     //alert(error?.response?.data)
     toast.error(error?.response?.data, {
       position: "top-left",
@@ -81,14 +106,25 @@ export const doneTask = createAsyncThunk("task/doneTask", async (task) => {
   }
 });
 
-export const AddTask = createAsyncThunk("task/addTask", async (payload) => {
+interface newTaskType {
+  userId: number;
+  owner: number;
+  title: string ;
+  description: string;
+  date: number;
+  done: boolean
+}
+
+
+
+export const AddTask = createAsyncThunk("task/addTask", async (payload : addTaskPayLoadType) => {
   try {
     console.log(payload);
     const token = localStorage.getItem("token");
     const headers = { Authorization: `Bearer ${token}` };
-    const userId = Number(localStorage.getItem("id"));
-    const owner = userId;
-    const newTask = { userId, owner, ...payload.newTaskData };
+    //const userId = Number(localStorage.getItem("id"));
+    //const owner = userId;
+    const newTask : newTaskType  = {...payload.newTaskData };
     await axios.post(
       "http://localhost:4000/todos",
       {
@@ -103,7 +139,7 @@ export const AddTask = createAsyncThunk("task/addTask", async (payload) => {
         headers,
       }
     );
-  } catch (error) {
+  } catch (error :any ) {
     console.log(error?.response);
     //alert(error?.response)
     toast.error(error?.response?.data, {
@@ -143,8 +179,8 @@ export const todoSlice = createSlice({
       })
       .addCase(getTasks?.fulfilled, (state, action) => {
         state.tasks = action.payload;
-        state.openedTasks = action.payload.filter((task) => !task.done);
-        state.closedTasks = action.payload.filter((task) => task.done);
+        state.openedTasks = action.payload.filter((task: { done: any; }) => !task.done);
+        state.closedTasks = action.payload.filter((task: { done: any; }) => task.done);
         state.openedCount = state.openedTasks.length;
         state.closedCount = state.closedTasks.length;
         console.log(action);
@@ -157,8 +193,8 @@ export const todoSlice = createSlice({
       })
       .addCase(deleteTask?.fulfilled, (state, action) => {
         state.loading = false;
-        state.openedTasks = action.payload.filter((task) => !task.done);
-        state.closedTasks = action.payload.filter((task) => task.done);
+        state.openedTasks = action.payload.filter((task: { done: any; }) => !task.done);
+        state.closedTasks = action.payload.filter((task: { done: any; }) => task.done);
         state.openedCount = state.openedTasks.length;
         state.closedCount = state.closedTasks.length;
         //state.tasks = action.payload;
@@ -207,8 +243,8 @@ export const todoSlice = createSlice({
         /*if(state.tasks.id === action.payload){
           state.tasks.done = !state.tasks.done
         }*/
-        state.openedTasks = action.payload.filter((task) => !task.done);
-        state.closedTasks = action.payload.filter((task) => task.done);
+        state.openedTasks = action.payload.filter((task: { done: any; }) => !task.done);
+        state.closedTasks = action.payload.filter((task: { done: any; }) => task.done);
         state.openedCount = state.openedTasks.length;
         state.closedCount = state.closedTasks.length;
         const taskId = action.payload.id;

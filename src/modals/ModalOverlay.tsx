@@ -1,23 +1,28 @@
-/* eslint-disable react/prop-types */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 //import axios from "axios";
 import { useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { useDispatch } from "react-redux";
+//import { useDispatch } from "react-redux";
+import { useAppDispatch } from "../reduxHook";
 import { AddTask } from "../Features/todoSlice";
 import { getTasks } from "../Features/todoSlice";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router";
 
+
+
+
 const ModalOverlay = ({ onInput, onConfirm }) => {
   const [enteredTitle, setEnteredTitle] = useState("");
   const [enteredDescribe, setEnteredDescribe] = useState("");
   const [enteredDate, setEnteredDate] = useState("");
-  const [toggle, setToggle] = useState(false);
-  const dispatch = useDispatch(); // Get the dispatch function
+  const [toggle, setToggle] = useState<boolean>(false);
+  const dispatch = useAppDispatch(); // Get the dispatch function
   const navigateTo = useNavigate();
   const submitHandler = async (e) => {
     e.preventDefault();
-    const ownerAndId = localStorage.getItem("id");
+    const ownerAndId = Number(localStorage.getItem("id"))
     const newTaskData = {
       userId: ownerAndId,
       owner: ownerAndId,
@@ -36,7 +41,16 @@ const ModalOverlay = ({ onInput, onConfirm }) => {
         AddTask({
           newTaskData,
           onFail: () => {
-            navigateTo("/login");
+            toast.error("error", {
+              position: "top-left",
+              autoClose: 3000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "colored",
+            });
           },
         })
       );
@@ -54,7 +68,7 @@ const ModalOverlay = ({ onInput, onConfirm }) => {
       setEnteredDate("");
       setToggle(false);
       onConfirm(); // Call onConfirm to close the modal
-    } catch (error) {
+    } catch (error : any) {
       console.log(error?.response?.data);
       toast.error(error?.response?.data, {
         position: "top-left",

@@ -1,24 +1,12 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
-class CurrentTimeComponent extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      formattedDate: '',
-    };
-  }
+interface CurrentTimeProps {}
 
-  componentDidMount() {
-    this.updateFormattedDate();
-    // Update the date every minute
-    this.interval = setInterval(this.updateFormattedDate, 60000);
-  }
+const CurrentTimeComponent: React.FC<CurrentTimeProps> = () => {
+  const [formattedDate, setFormattedDate] = useState('');
+  const [intervalId, setIntervalId] = useState<NodeJS.Timeout | null>(null);
 
-  componentWillUnmount() {
-    clearInterval(this.interval);
-  }
-
-  updateFormattedDate = () => {
+  const updateFormattedDate = () => {
     const currentDate = new Date();
 
     const dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
@@ -33,16 +21,24 @@ class CurrentTimeComponent extends React.Component {
     const dayOfMonth = currentDate.getDate();
 
     const formattedDate = `${dayName}, ${dayOfMonth} ${monthName}`;
-    this.setState({ formattedDate });
+    setFormattedDate(formattedDate);
   };
 
-  render() {
-    const { formattedDate } = this.state;
+  useEffect(() => {
+    updateFormattedDate();
+    const id = setInterval(updateFormattedDate, 60000);
+    setIntervalId(id);
 
-    return (
-        <p className='lead'>{formattedDate}</p>
-    );
-  }
-}
+    return () => {
+      if (intervalId) {
+        clearInterval(intervalId);
+      }
+    };
+  }, [intervalId]);
+
+  return (
+    <p className='lead'>{formattedDate}</p>
+  );
+};
 
 export default CurrentTimeComponent;
