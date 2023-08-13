@@ -13,14 +13,14 @@ import { useNavigate } from "react-router";
 
 
 
-const ModalOverlay = ({ onInput, onConfirm }) => {
+const ModalOverlay = ({ onInput, onConfirm } : {onInput : any,onConfirm : () => void}) => {
   const [enteredTitle, setEnteredTitle] = useState("");
   const [enteredDescribe, setEnteredDescribe] = useState("");
   const [enteredDate, setEnteredDate] = useState("");
   const [toggle, setToggle] = useState<boolean>(false);
   const dispatch = useAppDispatch(); // Get the dispatch function
   const navigateTo = useNavigate();
-  const submitHandler = async (e) => {
+  const submitHandler = async (e : React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const ownerAndId = Number(localStorage.getItem("id"))
     const newTaskData = {
@@ -109,7 +109,6 @@ const ModalOverlay = ({ onInput, onConfirm }) => {
           <div className="form-group">
             <label htmlFor="description">Description:</label>
             <textarea
-              type="textarea"
               className="form-control"
               id="description"
               placeholder="Enter description"

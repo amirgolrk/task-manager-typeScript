@@ -5,13 +5,10 @@ import { HiHome } from "react-icons/hi";
 import { RiLoginCircleLine } from "react-icons/ri";
 import { FaUserPlus } from "react-icons/fa";
 //import React from 'react';
-import { useSelector } from "react-redux";
 import { useState } from "react";
 import LogOutModal from "../modals/LogOutModal";
 const Layout = () => {
   const [logOutModalOpen,setLogOutModalOpen] = useState(false)
-  const userEmailRedux = useSelector((state) => state.login.email);
-  console.log(userEmailRedux);
   const userEmail = localStorage.getItem("email");
 
 
@@ -26,7 +23,7 @@ const Layout = () => {
         >
           <div className="container">
             {userEmail ? (
-              <h3 className="navbar-brand" href="#">
+              <h3 className="navbar-brand" ref="#">
                 Welcome {userEmail}
               </h3>
             ) : (

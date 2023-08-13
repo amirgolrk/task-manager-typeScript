@@ -1,12 +1,15 @@
-import { useState } from "react";
+//import { useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { useDispatch } from "react-redux";
 import { logOut } from "../Features/loginSlice";
 import { useNavigate } from "react-router";
 import { toast } from "react-toastify";
 
-// eslint-disable-next-line react/prop-types
-const LogOutOverLay = ({ onConfirm }) => {
+interface propTypes {
+  onConfirm : () => void
+}
+
+const LogOutOverLay = ({ onConfirm } :propTypes) => {
     const dispatchTo = useDispatch()
     const navigateTo = useNavigate()
     const logoutHandler = () => {
@@ -39,7 +42,7 @@ const LogOutOverLay = ({ onConfirm }) => {
           <div className="card-header">
             <h3 className="card-title fs-3 fw-3 text-center">Are you Sure ?</h3>
           </div>
-          <div className="card-body d-flex justify-content-around mt-4">
+          <div className="card-body d-flex justify-content-around mt-2">
             <button type="button" onClick={logoutHandler} className="btn bg-danger fs-4 fw-bold">
               Log out
             </button>

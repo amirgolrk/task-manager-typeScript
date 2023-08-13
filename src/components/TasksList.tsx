@@ -1,9 +1,11 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 //import React from "react";
 //import { useEffect,useState } from "react";
 import TaskItem from "./TaskItem";
 
 interface taskListType {
   items : {
+    image: any;
     title : string,
     id : number,
     userId : number,

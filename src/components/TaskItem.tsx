@@ -18,7 +18,8 @@ interface tasksType {
     owner : number,
     description : string,
     date : number,
-    done : boolean
+    done : boolean,
+    image : any
   },
   onDeleteItem : (taskId : number) => void
 }
@@ -56,6 +57,9 @@ const TaskItem = (props : tasksType) => {
   };
   const deleteHandler = () => {
     //props?.setLoading(true)
+    if(String(props.items.userId) as string !== localStorage.getItem("id") as string){
+      alert("this task is not for you")
+    }
     props.onDeleteItem(props.items.id)
 
     //dispatch(deleteTask(tasksId));

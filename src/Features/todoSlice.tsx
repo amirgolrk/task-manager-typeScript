@@ -5,54 +5,57 @@ import axios from "axios";
 import { toast } from "react-toastify";
 
 interface actionType {
-  onFail : () => void,
-  onSuccess : () => void
+  onFail: () => void;
+  onSuccess: () => void;
 }
 
 interface addTaskPayLoadType {
-  newTaskData : {  userId: number;
+  newTaskData: {
+    userId: number;
     owner: number;
-    title: string ;
+    title: string;
     description: string;
     date: number;
-    done: boolean},
-  onFail : () => void,
-
+    done: boolean;
+    image?: any;
+  };
+  onFail: () => void;
 }
 
-
-
-export const getTasks = createAsyncThunk("todo/getTodos", async (action : actionType) => {
-  try {
-    const token = localStorage.getItem("token");
-    const headers = { Authorization: `Bearer ${token}` };
-    const response = await axios.get("http://localhost:4000/todos", {
-      headers,
-    });
-    return response.data;
-  } catch (error : any) {
-    //alert(`${error?.response?.data} please log in again`)
-    toast.error(`${error?.message}`, {
-      position: "top-left",
-      autoClose: 3000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: "colored",
-    });
-    //localStorage.clear()
-    if (error?.response?.data === "jwt expired") {
-      action?.onFail();
-      localStorage.clear()
+export const getTasks = createAsyncThunk(
+  "todo/getTodos",
+  async (action: actionType) => {
+    try {
+      const token = localStorage.getItem("token");
+      const headers = { Authorization: `Bearer ${token}` };
+      const response = await axios.get("http://localhost:4000/todos", {
+        headers,
+      });
+      return response.data;
+    } catch (error: any) {
+      //alert(`${error?.response?.data} please log in again`)
+      toast.error(`${error?.message}`, {
+        position: "top-left",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+      //localStorage.clear()
+      if (error?.response?.data === "jwt expired") {
+        action?.onFail();
+        localStorage.clear();
+      }
     }
   }
-});
+);
 
 export const deleteTask = createAsyncThunk(
   "todo/deleteTodo",
-  async (taskId : number) => {
+  async (taskId: number) => {
     const token = localStorage.getItem("token");
     const headers = { Authorization: `Bearer ${token}` };
     const response = await axios.delete(
@@ -64,101 +67,125 @@ export const deleteTask = createAsyncThunk(
 );
 
 interface doneTaskType {
-  id : number,
-  done : boolean
+  id: number;
+  done: boolean;
 }
 
-export const doneTask = createAsyncThunk("task/doneTask", async (task : doneTaskType) => {
-  try {
-    const token = localStorage.getItem("token");
-    const headers = { Authorization: `Bearer ${token}` };
-    const response = await axios.patch(
-      `http://localhost:4000/todos/${task.id}`,
-      { done: !task.done },
-      {
-        headers,
-      }
-    );
-    await toast.success("Task done status edited successfully", {
-      position: "top-left",
-      autoClose: 3000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: "colored",
-    });
-    return response.data;
-  } catch (error : any) {
-    //alert(error?.response?.data)
-    toast.error(error?.response?.data, {
-      position: "top-left",
-      autoClose: 3000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: "colored",
-    });
-    console.log(error?.response?.data);
+export const doneTask = createAsyncThunk(
+  "task/doneTask",
+  async (task: doneTaskType) => {
+    try {
+      const token = localStorage.getItem("token");
+      const headers = { Authorization: `Bearer ${token}` };
+      const response = await axios.patch(
+        `http://localhost:4000/todos/${task.id}`,
+        { done: !task.done },
+        {
+          headers,
+        }
+      );
+      await toast.success("Task done status edited successfully", {
+        position: "top-left",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+      return response.data;
+    } catch (error: any) {
+      //alert(error?.response?.data)
+      toast.error(error?.response?.data, {
+        position: "top-left",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+      console.log(error?.response?.data);
+    }
   }
-});
+);
 
 interface newTaskType {
   userId: number;
   owner: number;
-  title: string ;
+  title: string;
   description: string;
   date: number;
-  done: boolean
+  done: boolean;
+  image?: any;
 }
 
-
-
-export const AddTask = createAsyncThunk("task/addTask", async (payload : addTaskPayLoadType) => {
-  try {
-    console.log(payload);
-    const token = localStorage.getItem("token");
-    const headers = { Authorization: `Bearer ${token}` };
-    //const userId = Number(localStorage.getItem("id"));
-    //const owner = userId;
-    const newTask : newTaskType  = {...payload.newTaskData };
-    await axios.post(
-      "http://localhost:4000/todos",
-      {
-        userId: newTask.userId,
-        owner: newTask.owner,
-        title: newTask.title,
-        description: newTask.description,
-        date: newTask.date,
-        done: newTask.done,
-      },
-      {
-        headers,
+export const AddTask = createAsyncThunk(
+  "task/addTask",
+  async (payload: addTaskPayLoadType) => {
+    try {
+      console.log(payload);
+      const token = localStorage.getItem("token");
+      const headers = { Authorization: `Bearer ${token}` };
+      //const userId = Number(localStorage.getItem("id"));
+      //const owner = userId;
+      const newTask: newTaskType = { ...payload.newTaskData };
+      await axios.post(
+        "http://localhost:4000/todos",
+        {
+          userId: newTask.userId,
+          owner: newTask.owner,
+          title: newTask.title,
+          description: newTask.description,
+          date: newTask.date,
+          done: newTask.done,
+        },
+        {
+          headers,
+        }
+      );
+    } catch (error: any) {
+      console.log(error?.response);
+      //alert(error?.response)
+      toast.error(error?.response?.data, {
+        position: "top-left",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+      if (error?.response?.data === "jwt expired") {
+        payload.onFail();
+        localStorage.clear();
       }
-    );
-  } catch (error :any ) {
-    console.log(error?.response);
-    //alert(error?.response)
-    toast.error(error?.response?.data, {
-      position: "top-left",
-      autoClose: 3000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: "colored",
-    });
-    if (error?.response?.data === "jwt expired") {
-      payload.onFail();
-      localStorage.clear()
     }
+    //return response.data;
   }
-  //return response.data;
-});
+);
+
+interface sliceType {
+  loading: boolean;
+  openedTasks: any;
+  closedTasks: any;
+  openedCount: number;
+  closedCount: number;
+  tasks:
+    | {
+        title: string;
+        description: string;
+        date: number;
+        done: boolean;
+        id: number;
+        userId: number;
+        owner?: number;
+      }[]
+    | null;
+}
 
 export const todoSlice = createSlice({
   name: "todoSlice",
@@ -169,7 +196,7 @@ export const todoSlice = createSlice({
     closedTasks: [],
     openedCount: 0,
     closedCount: 0,
-  },
+  } as sliceType,
   reducers: {},
 
   extraReducers: (builder) => {
@@ -179,8 +206,12 @@ export const todoSlice = createSlice({
       })
       .addCase(getTasks?.fulfilled, (state, action) => {
         state.tasks = action.payload;
-        state.openedTasks = action.payload.filter((task: { done: any; }) => !task.done);
-        state.closedTasks = action.payload.filter((task: { done: any; }) => task.done);
+        state.openedTasks = action.payload!.filter(
+          (task: { done: any }) => !task.done
+        );
+        state.closedTasks = action.payload!.filter(
+          (task: { done: any }) => task.done
+        );
         state.openedCount = state.openedTasks.length;
         state.closedCount = state.closedTasks.length;
         console.log(action);
@@ -193,8 +224,12 @@ export const todoSlice = createSlice({
       })
       .addCase(deleteTask?.fulfilled, (state, action) => {
         state.loading = false;
-        state.openedTasks = action.payload.filter((task: { done: any; }) => !task.done);
-        state.closedTasks = action.payload.filter((task: { done: any; }) => task.done);
+        state.openedTasks = action.payload.filter(
+          (task: { done: any }) => !task.done
+        );
+        state.closedTasks = action.payload.filter(
+          (task: { done: any }) => task.done
+        );
         state.openedCount = state.openedTasks.length;
         state.closedCount = state.closedTasks.length;
         //state.tasks = action.payload;
@@ -229,7 +264,7 @@ export const todoSlice = createSlice({
         state.loading = true;
       })
       .addCase(AddTask?.fulfilled, (state, action) => {
-        state.tasks = action.payload;
+        //state.tasks = action.payload;
         state.loading = false;
       })
       .addCase(AddTask?.rejected, (state, action) => {
@@ -243,12 +278,16 @@ export const todoSlice = createSlice({
         /*if(state.tasks.id === action.payload){
           state.tasks.done = !state.tasks.done
         }*/
-        state.openedTasks = action.payload.filter((task: { done: any; }) => !task.done);
-        state.closedTasks = action.payload.filter((task: { done: any; }) => task.done);
+        state.openedTasks = action.payload.filter(
+          (task: { done: any }) => !task.done
+        );
+        state.closedTasks = action.payload.filter(
+          (task: { done: any }) => task.done
+        );
         state.openedCount = state.openedTasks.length;
         state.closedCount = state.closedTasks.length;
         const taskId = action.payload.id;
-        const taskToUpdate = state.tasks.find((task) => task.id === taskId);
+        const taskToUpdate = (state.tasks ?? []).find((task) => task.id === taskId);
         if (taskToUpdate) {
           taskToUpdate.done = !taskToUpdate.done;
         }

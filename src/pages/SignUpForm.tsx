@@ -1,18 +1,21 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useState } from "react";
 import "./SignUpForm.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import {ChangeEvent} from "react"
 
 const SignUpForm = () => {
-  const [password1, setPassword1] = useState('');
-  const [password2, setPassword2] = useState('');
-  const [email, setEmail] = useState('');
-  const [showPassword, setShowPassword] = useState(false); // State to track password visibility
+  const [password1, setPassword1] = useState<string>('');
+  const [password2, setPassword2] = useState<string>('');
+  const [email, setEmail] = useState<string>('');
+  const [showPassword, setShowPassword] = useState(false); 
   const navigate = useNavigate();
-
-  const handleInputChange = (event, setInput) => {
+    //sam
+  const handleInputChange = (event : ChangeEvent<HTMLInputElement>, setInput: React.Dispatch<React.SetStateAction<string>> ) => {
     const { name, value } = event.target;
     setInput(value);
   };
@@ -21,7 +24,7 @@ const SignUpForm = () => {
     setShowPassword((prevState) => !prevState);
   };
 
-  const submitHandler = async (event) => {
+  const submitHandler = async (event :React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (password1 !== password2) {
       toast.error("Passwords don't match", {
@@ -58,7 +61,7 @@ const SignUpForm = () => {
         theme: "colored",
       });
       await navigate("/");
-    } catch (error) {
+    } catch (error : any) {
       console.log(error?.message);
       toast.error(error?.message, {
         position: "top-left",

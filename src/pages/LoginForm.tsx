@@ -4,9 +4,8 @@ import { Link,useNavigate } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 //import axios from "axios";
 import { useDispatch } from "react-redux";
-import {auth,handlingChange} from "../Features/loginSlice"
-import { toast } from "react-toastify";
-import { useState } from "react";
+import {auth} from "../Features/loginSlice"
+import { ChangeEvent,useState } from "react";
 const LoginForm = () => {
   const dispatch = useDispatch()
   const navigateTo = useNavigate()
@@ -16,7 +15,7 @@ const LoginForm = () => {
         email : "",
         password : ""
     })
-    const changeHandler = (e) => {
+    const changeHandler = (e : ChangeEvent<HTMLInputElement>) => {
       //const name = e.target.name
       //const value = e.target.value
 
@@ -32,7 +31,7 @@ const LoginForm = () => {
     };
 
 
-    const submitHandler = (e) => {
+    const submitHandler = (e : React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
          //dispatch(getTasks())
          dispatch(auth({onSuccess :() => {navigateTo("/")},onFail: () => {},loginInfo}))

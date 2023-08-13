@@ -11,7 +11,8 @@ interface tasksType {
     owner : number,
     description : string,
     date : number,
-    done : boolean
+    done : boolean,
+    image : any
   }[],
   onDeleteItem : () => void
 }
