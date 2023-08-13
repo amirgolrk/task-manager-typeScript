@@ -11,7 +11,6 @@ import { toast } from 'react-toastify';
 import { useNavigate } from "react-router";
 
 interface tasksType {
-  items : {
     title : string,
     id : number,
     userId ?: number,
@@ -19,15 +18,14 @@ interface tasksType {
     description : string,
     date : number,
     done : boolean,
-    image : any
-  },
-  onDeleteItem : (taskId : number) => void
+    image : any,
+    onDeleteItem : (taskId : number) => void
 }
 
 
 
 const TaskItem = (props : tasksType) => {
-  const [toggle, setToggle] = useState(props.items.done);
+  const [toggle, setToggle] = useState(props.done);
   const dispatch = useAppDispatch()
   //const tasksId = useAppSelector((state) => state.todo.tasks.id);
   const navigateTo = useNavigate()
@@ -35,7 +33,7 @@ const TaskItem = (props : tasksType) => {
   //const headers = { Authorization: `Bearer ${token}`}
   const toggleHandler = async () => {
     try{
-       dispatch(doneTask(props.items))
+       dispatch(doneTask(props))
       setToggle((prevToggle: any) => !prevToggle);
       //alert("Task done status edited successfully");
        dispatch(getTasks({onSuccess : () => {},onFail :() =>{navigateTo("/login")}}))
@@ -57,10 +55,10 @@ const TaskItem = (props : tasksType) => {
   };
   const deleteHandler = () => {
     //props?.setLoading(true)
-    if(String(props.items.userId) as string !== localStorage.getItem("id") as string){
+    if(String(props.userId) as string !== localStorage.getItem("id") as string){
       alert("this task is not for you")
     }
-    props.onDeleteItem(props.items.id)
+    props.onDeleteItem(props.id)
 
     //dispatch(deleteTask(tasksId));
     dispatch(getTasks({onSuccess : () => {},onFail :() =>{navigateTo("/login")}}))
@@ -81,11 +79,11 @@ const TaskItem = (props : tasksType) => {
             <div className="clearfix">
               <div className="float-start">
                 {!toggle ? (
-                  <span className="card-title tasktitle">{props.items.title}</span>
+                  <span className="card-title tasktitle">{props.title}</span>
                 ) : (
-                  <s className="card-title tasktitle">{props.items.title}</s>
+                  <s className="card-title tasktitle">{props.title}</s>
                 )}
-                <p className="lead tasklead">{props.items.description}</p>
+                <p className="lead tasklead">{props.description}</p>
               </div>
               <div className="float-end pe-4 pt-3">
                 <div className="form-check">
@@ -93,8 +91,8 @@ const TaskItem = (props : tasksType) => {
                     type="checkbox"
                     className="form-check-input rounded-circle"
                     style={{ transform: "scale(1.5)" }}
-                    id={`check${props.items.id}`}
-                    name={`option${props.items.id}`}
+                    id={`check${props.id}`}
+                    name={`option${props.id}`}
                     //value={Math.floor(Math.random() * 1000)}
                     checked={toggle}
                     onChange={
@@ -111,7 +109,7 @@ const TaskItem = (props : tasksType) => {
           <div className="row">
             <div className="col-sm-9 ps-5">
               {/*<p className="lead taskdate">{new Date(date * 1000).toLocaleString()}</p>*/}
-              <TimeDisplay unixTime={props.items.date}/>
+              <TimeDisplay unixTime={props.date}/>
             </div>
             <div className="col-sm-3">
               <img
