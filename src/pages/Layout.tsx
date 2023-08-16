@@ -1,16 +1,21 @@
-import { Outlet, Link } from "react-router-dom";
+import { Outlet, Link, useNavigate } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { RiLogoutCircleLine } from "react-icons/ri";
 import { HiHome } from "react-icons/hi";
 import { RiLoginCircleLine } from "react-icons/ri";
 import { FaUserPlus } from "react-icons/fa";
 //import React from 'react';
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import LogOutModal from "../modals/LogOutModal";
 const Layout = () => {
   const [logOutModalOpen,setLogOutModalOpen] = useState(false)
   const userEmail = localStorage.getItem("email");
-
+  const navigateTo = useNavigate()
+  useEffect(()=>{
+    if(userEmail){
+      navigateTo("")
+    }
+  },[navigateTo,userEmail])
 
   return (
     <>
@@ -23,7 +28,7 @@ const Layout = () => {
         >
           <div className="container">
             {userEmail ? (
-              <h3 className="navbar-brand" ref="#">
+              <h3 className="navbar-brand">
                 Welcome {userEmail}
               </h3>
             ) : (

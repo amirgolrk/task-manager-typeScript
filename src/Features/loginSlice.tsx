@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
-import { toast } from "react-toastify";
+import toaster from "../helpers/toaster";
 const loginSlice = createSlice({
   name: "login",
   initialState: {
@@ -23,27 +23,9 @@ const loginSlice = createSlice({
         })
         .catch((error) => {
           if (error.response) {
-            toast.error(error?.response?.data, {
-              position: "top-left",
-              autoClose: 3000,
-              hideProgressBar: false,
-              closeOnClick: true,
-              pauseOnHover: true,
-              draggable: true,
-              progress: undefined,
-              theme: "colored",
-            });
+            toaster(error?.response?.data,"error",3000)
           } else {
-            toast.error(error?.message, {
-              position: "top-left",
-              autoClose: 3000,
-              hideProgressBar: false,
-              closeOnClick: true,
-              pauseOnHover: true,
-              draggable: true,
-              progress: undefined,
-              theme: "colored",
-            });
+            toaster(error?.message,"error",3000)
           }
 
           console.log(error);
@@ -53,16 +35,7 @@ const loginSlice = createSlice({
     logOut: (state, action) => {
       try {
         localStorage.clear();
-        toast.warn("kicking you out !!! bye bye .", {
-          position: "top-center",
-          autoClose: 2000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "colored",
-        });
+        toaster("kicking you out !!! bye bye .","warn",2000)
         setTimeout(() => {
           action.payload.onSuccess();
         }, 2500);

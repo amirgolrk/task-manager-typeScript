@@ -7,8 +7,8 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { useAppDispatch } from "../reduxHook";
 import { AddTask } from "../Features/todoSlice";
 import { getTasks } from "../Features/todoSlice";
-import { toast } from "react-toastify";
 import { useNavigate } from "react-router";
+import toaster from "../helpers/toaster";
 
 
 
@@ -28,7 +28,7 @@ const ModalOverlay = ({ onInput, onConfirm } : {onInput : any,onConfirm : () => 
       owner: ownerAndId,
       title: enteredTitle,
       description: enteredDescribe,
-      done: !toggle,
+      done: toggle,
       date: new Date(enteredDate).getTime(),
     };
 
@@ -41,16 +41,7 @@ const ModalOverlay = ({ onInput, onConfirm } : {onInput : any,onConfirm : () => 
         AddTask({
           newTaskData,
           onFail: () => {
-            toast.error("error", {
-              position: "top-left",
-              autoClose: 3000,
-              hideProgressBar: false,
-              closeOnClick: true,
-              pauseOnHover: true,
-              draggable: true,
-              progress: undefined,
-              theme: "colored",
-            });
+            toaster("error","error",3000)
           },
         })
       );
@@ -68,18 +59,10 @@ const ModalOverlay = ({ onInput, onConfirm } : {onInput : any,onConfirm : () => 
       setEnteredDate("");
       setToggle(false);
       onConfirm(); // Call onConfirm to close the modal
+      window.scrollTo(0,document.body.scrollHeight)
     } catch (error : any) {
       console.log(error?.response?.data);
-      toast.error(error?.response?.data, {
-        position: "top-left",
-        autoClose: 3000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "colored",
-      });
+      toaster(error?.response?.data,"error",3000)
     }
   };
 
@@ -140,7 +123,7 @@ const ModalOverlay = ({ onInput, onConfirm } : {onInput : any,onConfirm : () => 
             id="checkbox"
             name="checkbox"
             //value={Math.floor(Math.random() * 1000)}
-            checked={!toggle}
+            checked={toggle}
             onChange={() => {
               setToggle(!toggle);
             }}

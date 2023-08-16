@@ -3,7 +3,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { useDispatch } from "react-redux";
 import { logOut } from "../Features/loginSlice";
 import { useNavigate } from "react-router";
-import { toast } from "react-toastify";
+import toaster from "../helpers/toaster";
 
 interface propTypes {
   onConfirm : () => void
@@ -19,16 +19,7 @@ const LogOutOverLay = ({ onConfirm } :propTypes) => {
               navigateTo("login");
             },
             onFail: () => {
-              toast.error("some error ocurred", {
-                position: "top-center",
-                autoClose: 3000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                theme: "colored",
-              });
+              toaster("some error ocurred","error",3000)
             },
           })
         );

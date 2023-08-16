@@ -1,10 +1,9 @@
-import  { useEffect, useState } from 'react';
+import React, { useState,useEffect } from 'react';
 
 interface CurrentTimeProps {}
 
 const CurrentTimeComponent: React.FC<CurrentTimeProps> = () => {
   const [formattedDate, setFormattedDate] = useState('');
-  const [intervalId, setIntervalId] = useState<NodeJS.Timeout | null>(null);
 
   const updateFormattedDate = () => {
     const currentDate = new Date();
@@ -23,18 +22,8 @@ const CurrentTimeComponent: React.FC<CurrentTimeProps> = () => {
     const formattedDate = `${dayName}, ${dayOfMonth} ${monthName}`;
     setFormattedDate(formattedDate);
   };
-
-  useEffect(() => {
-    updateFormattedDate();
-    const id = setInterval(updateFormattedDate, 60000);
-    setIntervalId(id);
-
-    return () => {
-      if (intervalId) {
-        clearInterval(intervalId);
-      }
-    };
-  }, [intervalId]);
+  useEffect(()=>{updateFormattedDate();},[])
+   // Call the function once to set the initial date
 
   return (
     <p className='lead'>{formattedDate}</p>

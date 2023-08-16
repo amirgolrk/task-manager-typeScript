@@ -5,11 +5,11 @@ import TaskItem from "./TaskItem";
 
 interface taskListType {
   items : {
-    image: any;
+    image?: any;
     title : string,
     id : number,
     userId : number,
-    owner : number,
+    owner ?: number,
     description : string,
     date : number,
     done : boolean
@@ -62,7 +62,6 @@ const TasksList = ({ items, onDeleteItem } : taskListType) => {
           title={elem.title}
           description={elem.description}
           date={elem.date}
-          image={elem.image}
           done={elem.done}
         />
       ))}

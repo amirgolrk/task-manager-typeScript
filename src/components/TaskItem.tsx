@@ -7,18 +7,18 @@ import TimeDisplay from "../helpers/TimeDisplay";
 import { doneTask, getTasks } from "../Features/todoSlice";
 //import { useSelector } from "react-redux";
 import { useAppDispatch } from "../reduxHook";
-import { toast } from 'react-toastify';
 import { useNavigate } from "react-router";
+import toaster from "../helpers/toaster";
 
 interface tasksType {
     title : string,
     id : number,
     userId ?: number,
-    owner : number,
+    owner ?: number,
     description : string,
     date : number,
     done : boolean,
-    image : any,
+    image ?: any,
     onDeleteItem : (taskId : number) => void
 }
 
@@ -37,19 +37,12 @@ const TaskItem = (props : tasksType) => {
       setToggle((prevToggle: any) => !prevToggle);
       //alert("Task done status edited successfully");
        dispatch(getTasks({onSuccess : () => {},onFail :() =>{navigateTo("/login")}}))
+       const doneId = document.getElementById(`${props.id}`) as HTMLElement
+       window.scrollTo(0,doneId.offsetTop - 20)
     }catch (error : any){
       console.log(error);
       //alert(error)
-      toast.error(error, {
-        position: "top-left",
-        autoClose: 3000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "colored",
-        });
+      toaster(error,"error",3000)
     }
 
   };
@@ -65,7 +58,7 @@ const TaskItem = (props : tasksType) => {
   }
   return (
     <>
-      <div className="card rounded-5 shadow mt-4">
+      <div id={`props.id`} className="card rounded-5 shadow mt-4">
         <div className="card body rounded-4">
           <div className="text-right pe-3 pt-2">
             <button

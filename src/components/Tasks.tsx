@@ -8,12 +8,11 @@ interface tasksType {
     title : string,
     id : number,
     userId : number,
-    owner : number,
+    owner ?: number,
     description : string,
     date : number,
     done : boolean,
-    image : any
-  }[],
+  }[] | null,
   onDeleteItem : () => void
 }
 
@@ -21,7 +20,7 @@ interface tasksType {
 const Tasks = ({items,onDeleteItem} : tasksType) => {
   return (
     <>
-      <TasksList onDeleteItem={onDeleteItem} items={items}/>
+      <TasksList onDeleteItem={onDeleteItem} items={items ?? []}/>
     </>
   );
 };

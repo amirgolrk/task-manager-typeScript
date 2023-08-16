@@ -38,17 +38,20 @@ function Card() {
     // We don't need this function since we're handling tasks through Redux.
     // If you have a form for adding tasks, you can dispatch the `AddTask` action instead.
     await dispatch(getTasks({onSuccess : () => {},onFail :() =>{navigateTo("/login")}}))
+    window.scrollTo(0,document.body.scrollHeight)
   };
 
   /*const deleteHandler = (taskId) => {
     dispatch(deleteTask(taskId));
     dispatch(getTasks());
   };*/
-  async function deleteHandler(taskId : number) {
+  async function deleteHandler(taskId ?: number) {
 
     
-    await dispatch(deleteTask(taskId));
+    await dispatch(deleteTask(taskId as number));
     await dispatch(getTasks({onSuccess : () => {},onFail :() =>{navigateTo("/login")}}))
+    const deletingId = document.getElementById(`${taskId as number - 1}`) as HTMLElement
+    window.scrollTo(0,deletingId.offsetTop - 20)
   }
 
   useEffect(() => {
@@ -96,7 +99,7 @@ function Card() {
             <div className="d-flex justify-content-center mt-3 text-center">
               <div className="col dash-nav">
                 <a
-                  href="#"
+                  href="/#"
                   className={`${taskType === 0 && "text-primary"}`}
                   onClick={() => {
                     setTaskType(0);
@@ -114,7 +117,7 @@ function Card() {
               </div>
               <div className="col dash-nav">
                 <a
-                  href="#"
+                  href="/#"
                   className={`${taskType === 1 && "text-primary"}`}
                   onClick={() => {
                     setTaskType(1);
@@ -132,7 +135,7 @@ function Card() {
               </div>
               <div className="col dash-nav">
                 <a
-                  href="#"
+                  href="/#"
                   className={`${taskType === 2 && "text-primary"}`}
                   onClick={() => {
                     setTaskType(2);
@@ -149,7 +152,7 @@ function Card() {
                 </a>
               </div>
               <div className="col dash-nav">
-                <a href="#">
+                <a href="/#">
                   Archived{" "}
                   <span className="badge bg-secondary rounded-pill ms-1">
                     2
