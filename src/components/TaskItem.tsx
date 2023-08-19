@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 //import React from "react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import TimeDisplay from "../helpers/TimeDisplay";
 //import { useDispatch } from "react-redux";
 import { doneTask, getTasks } from "../Features/todoSlice";
@@ -11,51 +11,70 @@ import { useNavigate } from "react-router";
 import toaster from "../helpers/toaster";
 
 interface tasksType {
-    title : string,
-    id : number,
-    userId ?: number,
-    owner ?: number,
-    description : string,
-    date : number,
-    done : boolean,
-    image ?: any,
-    onDeleteItem : (taskId : number) => void
+  title: string;
+  id: number;
+  userId?: number;
+  owner?: number;
+  description: string;
+  date: number;
+  done: boolean;
+  image?: any;
+  onDeleteItem: (taskId: number) => void;
 }
 
-
-
-const TaskItem = (props : tasksType) => {
+const TaskItem = (props: tasksType) => {
   const [toggle, setToggle] = useState(props.done);
-  const dispatch = useAppDispatch()
+  console.log(props.done);
+  console.log(toggle);
+  useEffect(() =>{
+    setToggle(props.done)
+  },[props.done])
+  const dispatch = useAppDispatch();
   //const tasksId = useAppSelector((state) => state.todo.tasks.id);
-  const navigateTo = useNavigate()
+  const navigateTo = useNavigate();
   //const token = localStorage.getItem("token");
   //const headers = { Authorization: `Bearer ${token}`}
   const toggleHandler = async () => {
-    try{
-       dispatch(doneTask(props))
-      setToggle((prevToggle: any) => !prevToggle);
+    try {
+      await dispatch(doneTask(props));
+      await setToggle((prevToggle: any) => !prevToggle);
       //alert("Task done status edited successfully");
-       dispatch(getTasks({onSuccess : () => {},onFail :() =>{navigateTo("/login")}}))
-       const doneId = document.getElementById(`${props.id}`) as HTMLElement
-       window.scrollTo(0,doneId.offsetTop - 20)
-    }catch (error : any){
+      await dispatch(
+        getTasks({
+          onSuccess: () => {},
+          onFail: () => {
+            navigateTo("/login");
+          },
+        })
+      );
+      const doneId = document.getElementById(`${props.id}`) as HTMLElement;
+      await window.scrollTo(0, doneId.offsetTop - 20);
+    } catch (error: any) {
       console.log(error);
       //alert(error)
-      toaster(error,"error",3000)
+      toaster(error, "error", 3000);
     }
-
   };
-  const deleteHandler = () => {
+  const deleteHandler = async() => {
     //props?.setLoading(true)
-    if(String(props.userId) as string !== localStorage.getItem("id") as string){
-      alert("this task is not for you")
+    if (
+      (String(props.userId) as string) !==
+      (localStorage.getItem("id") as string)
+    ) {
+      alert("this task is not for you");
     }
-    props.onDeleteItem(props.id)
+    await props.onDeleteItem(props.id);
 
     //dispatch(deleteTask(tasksId));
-    dispatch(getTasks({onSuccess : () => {},onFail :() =>{navigateTo("/login")}}))
-  }
+    await dispatch(
+      getTasks({
+        onSuccess: () => {},
+        onFail: () => {
+          navigateTo("/login");
+        },
+      })
+    );
+  };
   return (
     <>
       <div id={`props.id`} className="card rounded-5 shadow mt-4">
@@ -102,7 +121,7 @@ const TaskItem = (props : tasksType) => {
           <div className="row">
             <div className="col-sm-9 ps-5">
               {/*<p className="lead taskdate">{new Date(date * 1000).toLocaleString()}</p>*/}
-              <TimeDisplay unixTime={props.date}/>
+              <TimeDisplay unixTime={props.date} />
             </div>
             <div className="col-sm-3">
               <img

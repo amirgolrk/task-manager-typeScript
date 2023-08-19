@@ -37,7 +37,7 @@ function Card() {
   const addData = async (task: any) => {
     // We don't need this function since we're handling tasks through Redux.
     // If you have a form for adding tasks, you can dispatch the `AddTask` action instead.
-    await dispatch(getTasks({onSuccess : () => {},onFail :() =>{navigateTo("/login")}}))
+    //await dispatch(getTasks({onSuccess : () => {},onFail :() =>{navigateTo("/login")}}))
     window.scrollTo(0,document.body.scrollHeight)
   };
 

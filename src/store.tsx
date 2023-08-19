@@ -1,8 +1,11 @@
-import { configureStore } from '@reduxjs/toolkit'
+import { configureStore,getDefaultMiddleware } from '@reduxjs/toolkit'
 import loginSlice from './Features/loginSlice'
 import todoSlice from './Features/todoSlice'
 
 const store = configureStore({
+    middleware: getDefaultMiddleware({
+        serializableCheck: false,
+      }),
     reducer : {
         login : loginSlice,
         todo : todoSlice,

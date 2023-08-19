@@ -35,11 +35,14 @@ export const getTasks = createAsyncThunk(
       return response.data;
     } catch (error: any) {
       //alert(`${error?.response?.data} please log in again`)
-      toaster(`${error?.message}`,"error",3000)
+      console.log(error);
       //localStorage.clear()
       if (error?.response?.data === "jwt expired") {
         action?.onFail();
+        toaster(`${error?.response?.data}`,"error",3000)
         localStorage.clear();
+      }else{
+        toaster(`${error?.message}`,"error",3000)
       }
     }
   }
