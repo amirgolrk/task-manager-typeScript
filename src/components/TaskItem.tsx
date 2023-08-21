@@ -24,8 +24,6 @@ interface tasksType {
 
 const TaskItem = (props: tasksType) => {
   const [toggle, setToggle] = useState(props.done);
-  console.log(props.done);
-  console.log(toggle);
   useEffect(() =>{
     setToggle(props.done)
   },[props.done])
@@ -36,10 +34,10 @@ const TaskItem = (props: tasksType) => {
   //const headers = { Authorization: `Bearer ${token}`}
   const toggleHandler = async () => {
     try {
-      await dispatch(doneTask(props));
-      await setToggle((prevToggle: any) => !prevToggle);
+ dispatch(doneTask(props));
+ setToggle((prevToggle: any) => !prevToggle);
       //alert("Task done status edited successfully");
-      await dispatch(
+ dispatch(
         getTasks({
           onSuccess: () => {},
           onFail: () => {
@@ -63,10 +61,10 @@ const TaskItem = (props: tasksType) => {
     ) {
       alert("this task is not for you");
     }
-    await props.onDeleteItem(props.id);
+     props.onDeleteItem(props.id);
 
     //dispatch(deleteTask(tasksId));
-    await dispatch(
+    dispatch(
       getTasks({
         onSuccess: () => {},
         onFail: () => {

@@ -12,7 +12,8 @@ const Layout = () => {
   const userEmail = localStorage.getItem("email");
   const navigateTo = useNavigate()
   useEffect(()=>{
-    if(userEmail){
+    //window.location.pathname === "/" checks that if we enter the routes manually it doesnt auto navigate to the todos and it only navigates to todos if the url is empty of routes (or the default route) . 
+    if(userEmail && window.location.pathname === "/"){
       navigateTo("")
     }
   },[navigateTo,userEmail])

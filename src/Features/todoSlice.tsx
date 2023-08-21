@@ -6,8 +6,8 @@ import toaster from "../helpers/toaster";
 
 
 interface actionType {
-  onFail: () => void;
-  onSuccess: () => void;
+  onFail: () => void | null;
+  onSuccess: () => void | null;
 }
 
 interface addTaskPayLoadType {
@@ -192,6 +192,7 @@ export const todoSlice = createSlice({
       })
       .addCase(deleteTask?.fulfilled, (state, action) => {
         state.loading = false;
+        console.log(action.payload);
         state.openedTasks = action.payload.filter(
           (task: { done: any }) => !task.done
         );
